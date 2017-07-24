@@ -26,3 +26,8 @@ body {
   padding-top: 10px;
   border-bottom: solid 1px #ccc;
 }
+
+.submit-button:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+}
