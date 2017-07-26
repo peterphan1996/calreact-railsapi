@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PropTypes } from 'react';
 import AppointmentForm from './AppointmentForm';
 import { AppointmentsList } from './AppointmentsList';
 import update from 'immutability-helper';
@@ -7,51 +6,55 @@ import { FormErrors } from './FormErrors';
 import moment from 'moment';
 
 export default class Appointments extends React.Component {
+  static PropTypes = {
+    title: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      valid: PropTypes.bool.isRequired
+    }).isRequired,
+    appt_time: PropTypes.shape({
+      value: PropTypes.instanceOf(Date).isRequired,
+      valid: PropTypes.bool.isRequired
+    }).isRequired,
+    formValid: PropTypes.object.isRequired,
+    onUserInput: PropTypes.func.isRequired,
+    onFormSubmit: PropTypes.func.isRequired
+  }
   constructor (props, _railsContext) {
     super(props)
-    var today = new Date()
+
     this.state = {
       appointments: this.props.appointments,
       title: {value: '', valid:false},
-      appt_time: {value: '', valid:false},
+      appt_time: {value: new Date(), valid:false},
       formErrors: {},
       formValid: false
     }
   }
 
-  handleUserInput = (fieldName, fieldValue) => {
+  handleUserInput = (fieldName, fieldValue, validations) => {
     const newFieldState = update(this.state[fieldName],
                                 {value: {$set: fieldValue}});
     this.setState({[fieldName]: newFieldState},
-    () => { this.validateField(fieldName, fieldValue) });
+    () => { this.validateField(fieldName, fieldValue, validations) });
   }
 
-  validateField (fieldName, fieldValue) {
+  validateField (fieldName, fieldValue, validations) {
   let fieldValid;
-  let fieldErrors = [];
-  switch(fieldName) {
-    case 'title':
-      fieldValid = this.state.title.value.trim().length > 2;
-      if(!fieldValid) {
-      fieldErrors=[' should be at least 3 characters long'];
-      }
-      break;
-    case 'appt_time':
-      fieldValid = moment(this.state.appt_time.value).isValid() &&
-                   moment(this.state.appt_time.value).isAfter();
-      if(!fieldValid) {
-     fieldErrors=[' should not be in the past'];
-     }
-    default:
-      break;
-  }
+  let fieldErrors = validations.reduce((errors, v) => {
+    let e = v(fieldValue);
+   if(e !== '') {
+      errors.push(e);
+    }
+    return(errors);
+  }, []);
+  fieldValid = fieldErrors.length === 0;
   const newFieldState = update(this.state[fieldName],
                               {valid: {$set: fieldValid}});
 
   const newFormErrors = update(this.state.formErrors,
                               {$merge: {[fieldName]: fieldErrors}});
   this.setState({[fieldName]: newFieldState,
-                formErrors: newFormErrors}, this.validateForm);
+                formErrors: newFormErrors},() => this.validateForm());
 
 }
 
