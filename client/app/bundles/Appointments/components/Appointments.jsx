@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types'
 import AppointmentForm from './AppointmentForm';
 import { AppointmentsList } from './AppointmentsList';
 import update from 'immutability-helper';
@@ -6,18 +7,8 @@ import { FormErrors } from './FormErrors';
 import moment from 'moment';
 
 export default class Appointments extends React.Component {
-  static PropTypes = {
-    title: PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      valid: PropTypes.bool.isRequired
-    }).isRequired,
-    appt_time: PropTypes.shape({
-      value: PropTypes.instanceOf(Date).isRequired,
-      valid: PropTypes.bool.isRequired
-    }).isRequired,
-    formValid: PropTypes.object.isRequired,
-    onUserInput: PropTypes.func.isRequired,
-    onFormSubmit: PropTypes.func.isRequired
+  static propTypes = {
+    appointments: PropTypes.array.isRequired
   }
   constructor (props, _railsContext) {
     super(props)
