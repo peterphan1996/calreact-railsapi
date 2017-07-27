@@ -6,18 +6,12 @@ import {validations} from '../utils/validations';
 
 export default class AppointmentForm extends React.Component {
   static propTypes = {
-  title: PropTypes.shape({
-    value: PropTypes.string.isRequired,
-    valid: PropTypes.bool.isRequired
-  }).isRequired,
-  appt_time: PropTypes.shape({
-  value: PropTypes.instanceOf(Date).isRequired,
-  valid: PropTypes.bool.isRequired
-}).isRequired,
-  formValid: PropTypes.bool.isRequired,
-  onUserInput: PropTypes.func.isRequired,
-  onFormSubmit: PropTypes.func.isRequired
-}
+    title: PropTypes.shape({value: PropTypes.string.isRequired, valid: PropTypes.bool.isRequired}).isRequired,
+    appt_time: PropTypes.shape({value: PropTypes.instanceOf(Date).isRequired, valid: PropTypes.bool.isRequired}).isRequired,
+    formValid: PropTypes.bool.isRequired,
+    onUserInput: PropTypes.func.isRequired,
+    onFormSubmit: PropTypes.func.isRequired
+  }
   static formValidations = {
     title: [(s) => {
         return (validations.checkMinLength(s, 3))
@@ -45,6 +39,11 @@ export default class AppointmentForm extends React.Component {
     this.props.onUserInput(fieldName, fieldValue, AppointmentForm.formValidations[fieldName]);
   }
 
+  focus = () => {
+    //Explicitly focus the text input using the raw DOM API
+    this.titleInput.focus();
+  }
+
   render() {
     const inputProps = {
       name: 'appt_time'
@@ -54,8 +53,10 @@ export default class AppointmentForm extends React.Component {
       <div>
         <h2>Make a new appointment</h2>
         <form onSubmit={this.handleSubmit}>
-          <input name='title' placeholder='Appointment Title' value={this.props.title.value} onChange={this.handleChange}/>
-
+          <input name='title' placeholder='Appointment Title' ref={(input) => {
+            this.titleInput = input
+          }} value={this.props.title.value} onChange={this.handleChange}/>
+          <input type="button" value="Focus the text input" onClick={this.focus}/>
           <Datetime input={false} open={true} inputProps={inputProps} value={moment(this.props.appt_time.value)} onChange={this.setApptTime}/>
 
           <input type='submit' value='Make Appointment' className='submit-button' disabled={!this.props.formValid}/>
