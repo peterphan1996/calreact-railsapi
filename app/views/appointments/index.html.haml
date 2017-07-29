@@ -1,5 +1,4 @@
-%h1 React Calendar
-
-%h2 Appointments
-
-= react_component('Appointments', props: {appointments: @appointments}, prerender: true)
+- if user_signed_in?
+    = current_user.email
+    =link_to('Sign out', destroy_user_session_path, method: :delete)
+= react_component('AppRouter')

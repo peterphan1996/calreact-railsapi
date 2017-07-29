@@ -60,3 +60,5 @@ gem 'haml'
 gem 'react_on_rails'
 
 gem 'mini_racer', platforms: :ruby
+
+gem 'devise'

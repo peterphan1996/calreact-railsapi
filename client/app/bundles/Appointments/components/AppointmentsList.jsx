@@ -1,16 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types'
-import { Appointment } from './Appointment'
+import Appointment from './Appointment';
+import {PropTypes} from 'prop-types';
 
 export const AppointmentsList = ({appointments}) =>
-  <div>
-    {appointments.map(function(appointment) {
-      return (
-        <Appointment appointment={appointment} key={appointment.id} />
-      )
-    })}
-  </div>
+<div>
+  {appointments.map(function(appointment) {
+    return (<Appointment appointment={appointment} key={appointment.id}/>)
+  })}
+</div>
 
 AppointmentsList.propTypes = {
   appointments: PropTypes.array.isRequired
+}
+
+AppointmentsList.defaultProps = {
+  appointments: []
 }
