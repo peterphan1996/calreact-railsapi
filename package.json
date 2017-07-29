@@ -12,6 +12,8 @@
     "test": "rspec"
   },
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "jquery": "^3.2.1",
+    "prop-types": "^15.5.10",
+    "standard": "^10.0.2"
   }
 }
