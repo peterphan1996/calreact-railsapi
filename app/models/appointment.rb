@@ -1,5 +1,5 @@
 class Appointment < ApplicationRecord
-  belongs_to :user
+
   validates_presence_of :title, :appt_time
   validates :title, length: {minimum: 3}
   validate :appt_time_cannot_be_in_the_past
